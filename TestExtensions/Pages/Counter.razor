@@ -1,0 +1,92 @@
+﻿@page "/counter"
+@using Extensions;
+
+<PageTitle>Extensions</PageTitle>
+
+<div class="container d-flex flex-column justify-content-around">
+    <div class="row">
+        <div class="col-12" style="width:90%;text-align:center;">
+            <h3  >CPF</h3>
+        </div>
+        <div class="col-3">
+            <input  type="Text" style="width:90%;text-align:left;"     @bind=@CPFsemFormatacao/>
+        </div>
+        <div class="col-5">
+            <button type="button" style="width:90%;text-align:center;" @onclick="(() => Number2CPF( CPFsemFormatacao))">Number to Cpf >></button>
+        </div>
+        <div class="col-3">
+             <input  type="Text" style="width:90%;text-align:left;"    @bind=@ResultadoCpfFmt/>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3">
+            <input  type="text" style="width:90%;text-align:left;"     @bind=@CPFcomFormatacao/>
+        </div>
+        <div class="col-5"  >
+            <button type="button" style="width:90%;text-align:canter;" @onclick="(() => ToDigitsCpf( CPFcomFormatacao))">Formatted string to Digits >></button>
+        </div> 
+        <div class="col-3">
+            <input  type="text" style="width:90%;text-align:left;"     @bind=@ResultadoCpfUnFmt />
+        </div>       
+    </div>
+     <br /><br />
+     <div class="row">
+        <div class="col-12" style="width:90%;text-align:center;">
+            <h3  >CNPJ</h3>
+        </div>
+        <div class="col-3">
+            <input  type="Text"   style="width:90%;text-align:left;"   @bind=@CnpjsemFormatacao/>
+        </div>
+        <div class="col-5">
+            <button type="button" style="width:90%;text-align:center;" @onclick="(() => Number2CNPJ( CnpjsemFormatacao))">Number to CNPJ >></button>
+        </div>
+        <div class="col-3">
+             <input type="Text"   style="width:90%;text-align:left;"   @bind=@ResultadoCnpjFmt/>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-3">
+            <input  type="text" style="width:90%;text-align:left;"     @bind=@CnpjcomFormatacao/>
+        </div>
+        <div class="col-5"  >
+            <button type="button" style="width:90%;text-align:canter;" @onclick="(() => ToDigitsCnpj( CnpjcomFormatacao))">Formatted string to Digits >></button>
+        </div> 
+        <div class="col-3">
+            <input  type="text" style="width:90%;text-align:left;"     @bind=@ResultadoCnpjUnFmt />
+        </div>       
+    </div>
+</div>
+
+@code {
+    private string CPFsemFormatacao = "123456789009";
+    private string ResultadoCpfFmt = "";
+
+    private string CPFcomFormatacao = "123.456.789-09";
+    private string ResultadoCpfUnFmt = "";
+
+    private string CnpjsemFormatacao = "12345678000133";
+    private string ResultadoCnpjFmt = "";
+
+    private string CnpjcomFormatacao = "12.345.678/0001-33";
+    private string ResultadoCnpjUnFmt = "";
+
+    private void Number2CPF(string s) => ResultadoCpfFmt = s.ToCpf();
+    private void Number2Cpf2(string s) => ResultadoCpfFmt = FormataCpf(s);
+    private void ToDigitsCpf( string s)  => ResultadoCpfUnFmt  = s.ToDigits(); 
+    private void Number2CNPJ( string s)  => ResultadoCnpjFmt   = s.ToCnpj();
+    private void ToDigitsCnpj( string s) => ResultadoCnpjUnFmt = s.ToDigits(); 
+
+    private string FormataCpf( string CpfNaoFormatado)
+    {
+        int n = 0;
+        string Mask = "___.___.___-__";
+        char[] s = Mask.ToCharArray();              // Char array para evitar new strings in a loop
+
+        for ( int i = 0; i < s.Length; i++)
+            if ( Mask[i] == '_')
+                if (n < CpfNaoFormatado.Length) s[i] = (char)CpfNaoFormatado[n++]; else break;
+        return new string(s);       
+    }
+}
